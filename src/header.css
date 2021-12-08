@@ -1,0 +1,25 @@
+nav {
+  margin-bottom: 1rem;
+}
+
+.navbar-light .navbar-nav .nav-link{
+  border-radius: 10px;
+  margin-left: 0.25rem;
+  margin-right: 0.25rem;
+}
+
+.navbar-light .navbar-nav .nav-link:hover{
+  color: #FF93A8;
+}
+
+
+.navbar-light .navbar-nav .nav-link.active, .navbar-light .navbar-nav .show>.nav-link{
+  color: white;
+  background-color: #FF6584;
+  border: 1px solid #FF6584;
+  cursor: default;
+}
+
+.navbar-light .navbar-nav .nav-link.active, .navbar-light .navbar-nav .show>.nav-link:hover{
+  color: white;
+}

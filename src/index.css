@@ -1,0 +1,24 @@
+* {
+  font-family: 'Montserrat', sans-serif;
+  font-size: 1rem;
+  font-weight: 400;
+  color: #2F2E41;
+}
+
+.title .subtitle {
+  text-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+  display: flex;
+  align-items: center;
+  text-align: center;
+}
+
+.title {
+  font-weight: 700;
+  color: #FF6584;
+}
+
+.size {
+  position: absolute;
+  top: 10rem;
+  left: 0px;
+}
