@@ -44,6 +44,7 @@ class RealtimeApp extends React.Component {
         });
 
       const modelPromise = tf.loadGraphModel(weights);
+
       Promise.all([modelPromise, webCamPromise])
         .then(values => {
           this.detectFrame(this.videoRef.current, values[0]);
@@ -52,6 +53,15 @@ class RealtimeApp extends React.Component {
           console.error(error);
         });
     }
+  }
+
+
+  componentWillUnmount(){
+    const tracks = this.myStream.getTracks();
+
+    tracks.forEach(function(track) {
+      track.stop();
+    });
   }
 
   detectFrame = (video, model) => {

@@ -2,8 +2,8 @@ import React from "react";
 import ReactDOM from "react-dom";
 import { BrowserRouter as Router, Switch, Route, Link } from "react-router-dom";
 
-import RealtimeApp from './realtime';
-import UploadApp from './upload';
+import Realtime from './realtime';
+import Upload from './upload';
 import "./header.css";
 
 export default function Header() {
@@ -36,14 +36,4 @@ export default function Header() {
   );
 }
 
-function Realtime() {
-  return (
-    <RealtimeApp />
-  );
-}
-
-function Upload() {
-  return (
-    <UploadApp />
-  );
-}
+ 
