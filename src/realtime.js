@@ -1,5 +1,5 @@
-import React from "react";
 import * as tf from '@tensorflow/tfjs';
+import React from "react";
 tf.setBackend('webgl');
 
 const weights = '/facemask-detector/model.json';
@@ -56,10 +56,10 @@ class RealtimeApp extends React.Component {
   }
 
 
-  componentWillUnmount(){
+  componentWillUnmount() {
     const tracks = this.myStream.getTracks();
 
-    tracks.forEach(function(track) {
+    tracks.forEach(function (track) {
       track.stop();
     });
   }
@@ -69,15 +69,16 @@ class RealtimeApp extends React.Component {
     const input = tf.tidy(() => {
       return tf.image.resizeBilinear(tf.browser.fromPixels(video), [modelWeight, modelHeight])
         .div(255.0).expandDims(0);
-    }); 
+    });
+
     model.executeAsync(input)
-    .then(predictions => {
-      this.renderPredictions(predictions, video);
+      .then(predictions => {
+        this.renderPredictions(predictions, video);
         requestAnimationFrame(() => {
           this.detectFrame(video, model);
-        });    
-    tf.engine().endScope();
-    });
+        });
+        tf.engine().endScope();
+      });
   };
 
   renderPredictions = predictions => {
@@ -101,7 +102,7 @@ class RealtimeApp extends React.Component {
       tf.dispose(predictions);
 
       var i;
-      for (i = 0; i < valid_detections_data; ++i){
+      for (i = 0; i < valid_detections_data; ++i) {
         let [x1, y1, x2, y2] = boxes_data.slice(i * 4, (i + 1) * 4);
         x1 *= c.width;
         x2 *= c.width;
@@ -124,8 +125,8 @@ class RealtimeApp extends React.Component {
         ctx.fillRect(x1, y1, textWidth + 4, textHeight + 4);
 
       }
-      for (i = 0; i < valid_detections_data; ++i){
-        let [x1, y1, , ] = boxes_data.slice(i * 4, (i + 1) * 4);
+      for (i = 0; i < valid_detections_data; ++i) {
+        let [x1, y1, ,] = boxes_data.slice(i * 4, (i + 1) * 4);
         x1 *= c.width;
         y1 *= c.height;
         const klass = names[classes_data[i]];
@@ -144,7 +145,7 @@ class RealtimeApp extends React.Component {
         <h2 className="text-center title">Face Mask Detection with YOLOv5</h2>
         <p className="text-center subtitle">Real-time detection.</p>
         <video
-          style={{width: '640px', height: '480px'}}
+          style={{ width: '640px', height: '480px' }}
           className="size"
           autoPlay
           playsInline
@@ -160,6 +161,7 @@ class RealtimeApp extends React.Component {
           width="640"
           height="480"
         />
+
       </div>
     );
   }

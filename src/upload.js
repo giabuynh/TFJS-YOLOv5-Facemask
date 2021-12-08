@@ -1,8 +1,8 @@
+import * as tf from '@tensorflow/tfjs';
 import React from "react";
 import MagicDropzone from "react-magic-dropzone";
-import * as tf from '@tensorflow/tfjs';
-
 import "./upload.css";
+
 const weights = '/facemask-detector/model.json';
 
 const [modelWeight, modelHeight] = [640, 640];
@@ -19,7 +19,6 @@ class UploadApp extends React.Component {
     let model = await tf.loadGraphModel(weights);
     this.setState({ model });
   }
-
 
   onDrop = (accepted, rejected, links) => {
     this.setState({ preview: accepted[0].preview || links[0] });
@@ -53,23 +52,16 @@ class UploadApp extends React.Component {
     const c = document.getElementById("canvas");
     const ctx = c.getContext("2d");
     this.cropToCanvas(e.target, c, ctx);
-    let input;
 
-      input = tf.tidy(() => {
-        // console.log('input:', tf.image.resizeBilinear(tf.browser.fromPixels(c), [modelWeight, modelHeight])
-        // .div(255.0).expandDims(0));
-        return tf.image.resizeBilinear(tf.browser.fromPixels(c), [modelWeight, modelHeight])
-          .div(255.0).expandDims(0);
-      });
+    const input = tf.tidy(() => {
+      // console.log('input:', tf.image.resizeBilinear(tf.browser.fromPixels(c), [modelWeight, modelHeight])
+      // .div(255.0).expandDims(0));
+      return tf.image.resizeBilinear(tf.browser.fromPixels(c), [modelWeight, modelHeight])
+        .div(255.0).expandDims(0);
+    });
 
-    let res;
 
-    try{
-      res = await this.state.model.executeAsync(input);
-    }catch(err){
-      console.dir(err);
-    }
-
+    const res = await this.state.model.executeAsync(input);
     // Font options.
     const font = "16px sans-serif";
     ctx.font = font;
@@ -82,8 +74,9 @@ class UploadApp extends React.Component {
     const valid_detections_data = valid_detections.dataSync()[0];
 
     tf.dispose(res)
+
     var i;
-    for (i = 0; i < valid_detections_data; ++i){
+    for (i = 0; i < valid_detections_data; ++i) {
       let [x1, y1, x2, y2] = boxes_data.slice(i * 4, (i + 1) * 4);
       x1 *= c.width;
       x2 *= c.width;
@@ -107,8 +100,8 @@ class UploadApp extends React.Component {
 
     }
 
-    for (i = 0; i < valid_detections_data; ++i){
-      let [x1, y1, , ] = boxes_data.slice(i * 4, (i + 1) * 4);
+    for (i = 0; i < valid_detections_data; ++i) {
+      let [x1, y1, ,] = boxes_data.slice(i * 4, (i + 1) * 4);
       x1 *= c.width;
       y1 *= c.height;
       const klass = names[classes_data[i]];
