@@ -17,8 +17,8 @@ export default function Header() {
           </button>
           <div id="navbarNavAltMarkup" className="collapse navbar-collapse flex-grow-1 justify-content-end">
             <div className="navbar-nav">
-              <Link to="/" className="nav-link" aria-current="page">Real-time</Link>
-              <Link to="/upload" className="nav-link">Upload</Link>
+              <a href="/" className="nav-link" aria-current="page">Real-time</a>
+              <a href="/upload" className="nav-link">Upload</a>
             </div>
           </div>
         </div>     
