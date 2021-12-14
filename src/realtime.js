@@ -4,8 +4,9 @@ tf.setBackend('webgl');
 
 const weights = '/facemask-detector/model.json';
 const [modelWeight, modelHeight] = [640, 640];
-
 const names = ['incorrect', 'mask', 'no-mask'];
+const colors = ['#FFDE80', '#66FF80', '#FF6584'];
+
 
 class RealtimeApp extends React.Component {
   state = {
@@ -44,7 +45,6 @@ class RealtimeApp extends React.Component {
         });
 
       const modelPromise = tf.loadGraphModel(weights);
-
       Promise.all([modelPromise, webCamPromise])
         .then(values => {
           this.detectFrame(this.videoRef.current, values[0]);
@@ -82,6 +82,8 @@ class RealtimeApp extends React.Component {
   };
 
   renderPredictions = predictions => {
+    document.getElementById("rt-loader").style.display = "none";
+    document.getElementById("loader-status").innerHTML = "Real-time detection.";
     var c = document.getElementById('frame');
     if (this.canvasRef != null && this.canvasRef.current != null) {
       const ctx = this.canvasRef.current.getContext("2d");
@@ -102,6 +104,7 @@ class RealtimeApp extends React.Component {
       tf.dispose(predictions);
 
       var i;
+      const textHeight = parseInt(font, 10);
       for (i = 0; i < valid_detections_data; ++i) {
         let [x1, y1, x2, y2] = boxes_data.slice(i * 4, (i + 1) * 4);
         x1 *= c.width;
@@ -114,16 +117,15 @@ class RealtimeApp extends React.Component {
         const score = scores_data[i].toFixed(2);
 
         // Draw the bounding box.
-        ctx.strokeStyle = "#00FFFF";
+        ctx.strokeStyle = colors[classes_data[i]];
         ctx.lineWidth = 4;
         ctx.strokeRect(x1, y1, width, height);
 
         // Draw the label background.
-        ctx.fillStyle = "#00FFFF";
+        ctx.fillStyle = colors[classes_data[i]];
         const textWidth = ctx.measureText(klass + ":" + score).width;
-        const textHeight = parseInt(font, 10); // base 10
-        ctx.fillRect(x1, y1, textWidth + 4, textHeight + 4);
-
+        // const textHeight = parseInt(font, 10); // base 10
+        ctx.fillRect(x1-2, y1-textHeight-4, textWidth + 4, textHeight + 4);
       }
       for (i = 0; i < valid_detections_data; ++i) {
         let [x1, y1, ,] = boxes_data.slice(i * 4, (i + 1) * 4);
@@ -133,35 +135,38 @@ class RealtimeApp extends React.Component {
         const score = scores_data[i].toFixed(2);
 
         // Draw the text last to ensure it's on top.
-        ctx.fillStyle = "#000000";
-        ctx.fillText(klass + ":" + score, x1, y1);
+        ctx.fillStyle = "#2f2e41";
+        ctx.fillText(klass + ":" + score, x1, y1 - textHeight);
       }
     }
   };
 
   render() {
     return (
-      <div>
+      <div className="d-flex flex-column justify-content-center">
         <h2 className="text-center title">Face Mask Detection with YOLOv5</h2>
-        <p className="text-center subtitle">Real-time detection.</p>
-        <video
-          style={{ width: '640px', height: '480px' }}
-          className="size"
-          autoPlay
-          playsInline
-          muted
-          ref={this.videoRef}
-          width="640"
-          height="480"
-          id="frame"
-        />
-        <canvas
-          className="size"
-          ref={this.canvasRef}
-          width="640"
-          height="480"
-        />
-
+        <div className="d-inline-flex flex-row justify-content-center">
+          <p className="text-center subtitle" id="loader-status">Loading model</p>
+          <div className="lds-ellipsis" id="rt-loader"><div></div><div></div><div></div><div></div></div>
+        </div>
+        <div className="d-flex flex-column justify-content-center align-items-start">
+          <video
+            className="mx-auto z-index-1 position-relative"
+            autoPlay
+            playsInline
+            muted
+            ref={this.videoRef}
+            width="640"
+            height="480" 
+            id="frame"          
+          />
+          <canvas
+            className="mx-auto z-index-2 d-flex align-self-center position-absolute"
+            ref={this.canvasRef}
+            width="640"
+            height="480"
+          />
+        </div>
       </div>
     );
   }
