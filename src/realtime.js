@@ -4,7 +4,7 @@ tf.setBackend('webgl');
 
 const weights = '/facemask-detector/model.json';
 const [modelWeight, modelHeight] = [640, 640];
-const names = ['incorrect', 'mask', 'no-mask'];
+const names = ['incorrect mask', 'mask', 'no mask'];
 const colors = ['#FFDE80', '#66FF80', '#FF6584'];
 
 

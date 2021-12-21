@@ -7,7 +7,7 @@ import MagicDropzone from "react-magic-dropzone";
 const weights = '/facemask-detector/model.json';
 
 const [modelWeight, modelHeight] = [640, 640];
-const names = ['incorrect', 'mask', 'no-mask'];
+const names = ['incorrect mask', 'mask', 'no mask'];
 const colors = ['#FFDE80', '#66FF80', '#FF6584'];
 
 class UploadApp extends React.Component {
@@ -74,6 +74,12 @@ class UploadApp extends React.Component {
     const scores_data = scores.dataSync();
     const classes_data = classes.dataSync();
     const valid_detections_data = valid_detections.dataSync()[0];
+
+    // console.log(res);
+    // console.log(boxes_data);
+    // console.log(scores_data);
+    // console.log(classes_data);
+    // console.log(valid_detections_data);
 
     tf.dispose(res)
 
